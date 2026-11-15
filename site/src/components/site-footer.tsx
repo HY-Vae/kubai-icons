@@ -10,6 +10,7 @@ import { Container } from "@/components/kit/layout";
 import { quietLink } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
 import { useLocalize, useTr } from "@/lib/use-locale";
+import { LearnFooterLinks } from "@/learn/footer-links";
 
 const link = cn("block w-fit py-1 pointer-coarse:py-2", quietLink);
 
@@ -51,6 +52,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4">
           <Column title={tr("Library", "图标库")}>
             <Link href={loc("/icons/")} className={link}>{tr("Icons", "图标")}</Link>
+            <LearnFooterLinks className={link} />
             <Link href={loc("/icons/submit/")} className={link}>{tr("Submit an icon", "提交图标")}</Link>
             <Link href={loc("/docs/")} className={link}>{tr("Docs", "文档")}</Link>
             <Link href={loc("/skill/")} className={link}>Skill</Link>

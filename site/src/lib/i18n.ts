@@ -19,9 +19,11 @@ export const languageOf = (locale: Locale) => BY_CODE.get(locale)!;
 /** Only English and Simplified Chinese have a page per icon. Elsewhere an icon opens in the browser. */
 export const hasIconPages = (locale: Locale) => locale === "en" || locale === "zh";
 
-const ICON_PAGE = /^\/icons\/(?!submit\/)([^/?#]+)\/$/;
-/** True for the address of one icon's own page. */
-export const isIconPage = (path: string) => ICON_PAGE.test(path);
+const ICON_PAGE = /^\/icons\/(?!submit\/|sets\/)([^/?#]+)\/$/;
+// Guides, comparisons and icon sets are written in English and Simplified Chinese only.
+const LEARN_PAGE = /^\/(docs\/guides|docs\/compare|icons\/sets)\//;
+/** True for an English address that exists only in English and Simplified Chinese. */
+export const isEnZhOnly = (path: string) => ICON_PAGE.test(path) || LEARN_PAGE.test(path);
 
 /** The language of a path. */
 export function localeOf(path: string | null | undefined): Locale {
@@ -34,8 +36,13 @@ export function localize(path: string, locale: Locale) {
   const from = localeOf(path);
   const bare = from === "en" ? path : path.slice(from.length + 1) || "/";
   if (locale === "en") return bare;
-  const icon = hasIconPages(locale) ? null : bare.match(ICON_PAGE);
-  return icon ? `/${locale}/icons/?icon=${icon[1]}` : `/${locale}${bare}`;
+  if (hasIconPages(locale)) return `/${locale}${bare}`;
+  const icon = bare.match(ICON_PAGE);
+  if (icon) return `/${locale}/icons/?icon=${icon[1]}`;
+  // Elsewhere the nearest page that every language has.
+  const learn = bare.match(LEARN_PAGE);
+  if (learn) return learn[1] === "icons/sets" ? `/${locale}/icons/` : `/${locale}/docs/`;
+  return `/${locale}${bare}`;
 }
 
 const LOADERS: Record<string, () => Promise<{ default: Messages }>> = {

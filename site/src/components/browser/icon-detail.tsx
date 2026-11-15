@@ -42,6 +42,8 @@ type Props = {
   heading?: string;
   /** Shown in the preview until the live icon has loaded. */
   placeholder?: ReactNode;
+  /** A link at the foot of the panel, such as the dialog's link to the icon's own page. */
+  footer?: ReactNode;
 };
 
 const LANG_KEY = "kubai-icons:code";
@@ -68,7 +70,7 @@ const DoneIcon = ({ done, icon: Icon }: { done: boolean; icon: ElementType }) =>
 const Label = ({ children }: { children: React.ReactNode }) => <p className="text-caption font-medium text-muted-foreground">{children}</p>;
 
 /** One icon's preview, code and downloads, in the dialog or on the icon's own page. */
-export function IconDetail({ meta, related, categories, color, variant, badge, onBadge, onOpen, onCategory, onKeyword, title: Title, description: Description, heading, placeholder }: Props) {
+export function IconDetail({ meta, related, categories, color, variant, badge, onBadge, onOpen, onCategory, onKeyword, title: Title, description: Description, heading, placeholder, footer }: Props) {
   const bc = badge === "semantic" ? "semantic" : undefined;
   const mainBc = meta.badge ? bc : undefined;
   const icon = useIcon(meta);
@@ -168,9 +170,10 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
   const root = related.find((r) => !r.base);
   const local = useLocalName(meta);
   const rootLocal = useLocalName(root);
-  // Pages in other languages lead with the local name and keep the code name beside it.
+  // Pages in other languages lead with the local name and keep the code name beside it. On
+  // an icon's page the title names the family, so the code name shows which version is open.
   const readable = heading ?? local;
-  const codeName = locale !== "en" && readable ? meta.name : null;
+  const codeName = (locale !== "en" || (heading && meta.base)) && readable ? meta.name : null;
 
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] sm:grid-cols-[17rem_minmax(0,1fr)]">
@@ -203,7 +206,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
         {/* Every line here keeps one line's height, so switching versions never moves
             the controls below. */}
         <header key={meta.name} className="swap-in relative">
-          <Description className="flex h-5 items-center gap-0.5 pe-24 text-control whitespace-nowrap sm:pe-8 text-muted-foreground *:[a]:no-underline">
+          <Description className={cn("flex h-5 items-center gap-0.5 pe-24 text-control whitespace-nowrap sm:pe-8 text-muted-foreground *:[a]:no-underline", !onCategory && !meta.by && "sr-only")}>
             {onCategory ? (
               <>
                 <a href={asset(loc(`/icons/category/${meta.category}/`))} onClick={(e) => { if (!e.metaKey && !e.ctrlKey && !e.shiftKey) { e.preventDefault(); onCategory(meta.category); } }} className={cn("tap relative", quietLink, root && meta.base && "max-sm:hidden")}>{catName}</a>
@@ -216,7 +219,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
                 <RiArrowRightSLine aria-hidden className="size-4 shrink-0 rtl:rotate-180" />
                 <span className="min-w-0 truncate text-foreground">{local && meta.base ? localBadgeName(meta, locale) : local ?? meta.name}</span>
               </>
-            ) : catName}
+            ) : null}
             {meta.by && <a href={`https://github.com/${meta.by}`} target="_blank" rel="noreferrer" className={cn("tap relative ms-2 shrink-0", quietLink)}>by @{meta.by}</a>}
           </Description>
           <div className="flex h-8 items-center gap-1">
@@ -306,12 +309,16 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
           </section>
         )}
 
+        {!keywords && footer}
         {keywords && (
           <section>
+            <div className="flex items-center justify-between gap-4">
             <button type="button" aria-expanded={showKeywords} onClick={() => setShowKeywords((v) => !v)} className={cn("tap relative flex items-center gap-0.5 text-caption font-medium", quietLink)}>
               {tr("Keywords", "关键词")}
               <RiArrowRightSLine aria-hidden className={cn("size-4 transition-transform duration-200 motion-reduce:transition-none", showKeywords ? "rotate-90" : "rtl:rotate-180")} />
             </button>
+            {footer}
+            </div>
             <div className={cn("grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none", showKeywords ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
               <div className="min-h-0 overflow-hidden" inert={!showKeywords}>
             <dl className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-2 pt-3">

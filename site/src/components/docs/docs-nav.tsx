@@ -4,7 +4,9 @@ import { usePathname } from "next/navigation";
 import { navItem } from "@/components/kit/styles";
 import { Glide } from "@/components/kit/glide";
 import { cn } from "@/lib/utils";
-import { useLocalize, useTr } from "@/lib/use-locale";
+import { hasIconPages } from "@/lib/i18n";
+import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
+import { withLearnPages } from "@/learn/pages";
 
 export const DOCS = [
   { group: "Get started", zh: "入门", items: [
@@ -32,14 +34,20 @@ export const DOCS = [
   ] },
 ];
 
+/** The docs nav for the current page's language: English and Chinese add their guides and comparisons. */
+export function useDocs() {
+  return hasIconPages(useLocale()) ? withLearnPages(DOCS) : DOCS;
+}
+
 export function DocsNav() {
   const path = usePathname();
   const tr = useTr();
   const loc = useLocalize();
+  const docs = useDocs();
   const norm = (p: string) => p.replace(/\/$/, "") || "/";
   return (
     <nav className="relative isolate -mx-gutter flex gap-1 overflow-x-auto px-gutter md:mx-0 md:block md:space-y-6 md:overflow-visible md:px-0">
-      {DOCS.map((g) => (
+      {docs.map((g) => (
         <div key={g.group} className="contents md:block md:space-y-1">
           <p className="hidden px-2.5 pb-1 text-control font-semibold text-foreground md:block">{tr(g.group, g.zh)}</p>
           {g.items.map((i) => (

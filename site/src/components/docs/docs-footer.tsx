@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RiGithubLine, RiTwitterXLine } from "@remixicon/react";
 import { AuthorLink } from "@/components/author-link";
-import { DOCS } from "@/components/docs/docs-nav";
+import { useDocs } from "@/components/docs/docs-nav";
 import { FeedbackLink } from "@/components/feedback-link";
 import { SkillPrompt } from "@/components/skill-prompt";
 import { buttonVariants } from "@/components/ui/button";
@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { localize } from "@/lib/i18n";
 import { useLocalize, useTr } from "@/lib/use-locale";
 
-const PAGES = DOCS.flatMap((group) => group.items);
 const HOME = { href: "/", label: "Kubai Icons", zh: "Kubai Icons" };
 const norm = (p: string) => p.replace(/\/$/, "") || "/";
 const action = cn(buttonVariants({ variant: "outline", size: "sm" }));
@@ -21,11 +20,12 @@ const pagerLink = "tap relative grid gap-0.5 rounded-card border px-4 py-3 trans
 export function DocsFooter() {
   const tr = useTr();
   const loc = useLocalize();
+  const pages = useDocs().flatMap((group) => group.items);
   const path = norm(localize(usePathname() ?? "/", "en"));
-  const index = PAGES.findIndex((p) => norm(p.href) === path);
+  const index = pages.findIndex((p) => norm(p.href) === path);
   if (index < 0) return null;
-  const previous = PAGES[index - 1] ?? HOME;
-  const next = PAGES[index + 1];
+  const previous = pages[index - 1] ?? HOME;
+  const next = pages[index + 1];
   return (
     <div className="mt-12 max-w-3xl space-y-3">
       {path === "/skill" ? null : <SkillPrompt />}

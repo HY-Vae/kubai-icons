@@ -13,8 +13,9 @@ const CALLS: Record<string, number> = { tr: 0, msg: 0, pick: 1, translated: 1 };
 function sourceFiles(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
     const file = path.join(dir, e.name);
-    if (e.isDirectory()) return ['i18n', 'generated', 'zh'].includes(e.name) ? [] : sourceFiles(file);
-    // Only English and Simplified Chinese have a page per icon.
+    // Only English and Simplified Chinese have a page per icon, and src/learn holds guides,
+    // comparisons and collections, which are written in those two languages only.
+    if (e.isDirectory()) return ['i18n', 'generated', 'zh', 'learn'].includes(e.name) ? [] : sourceFiles(file);
     return /\.tsx?$/.test(e.name) && e.name !== 'icon-page.tsx' ? [file] : [];
   });
 }
