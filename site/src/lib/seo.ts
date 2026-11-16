@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { hasIconPages, isIconPage, languageOf, LANGUAGES, localeOf, localize, msg } from "./i18n";
+import { hasIconPages, isEnZhOnly, languageOf, LANGUAGES, localeOf, localize, msg } from "./i18n";
 import { SITE_URL } from "./site";
 
 export const SITE_NAME = "Kubai Icons";
@@ -22,7 +22,7 @@ export function pageMeta({ title, description, path, fullTitle }: { title?: stri
     alternates: {
       canonical: url,
       languages: {
-        ...Object.fromEntries(LANGUAGES.filter((l) => hasIconPages(l.code) || !isIconPage(localize(path, "en"))).map((l) => [l.tag, absolute(localize(path, l.code))])),
+        ...Object.fromEntries(LANGUAGES.filter((l) => hasIconPages(l.code) || !isEnZhOnly(localize(path, "en"))).map((l) => [l.tag, absolute(localize(path, l.code))])),
         "x-default": absolute(localize(path, "en")),
       },
     },

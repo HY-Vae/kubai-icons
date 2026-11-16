@@ -12,7 +12,7 @@ export function IconPageView({ meta, related, categories, heading }: { meta: Ico
   const [current, setCurrent] = useState(meta);
   useEffect(() => { if (current.new) markIconSeen(current.name); }, [current]);
   return (
-    <div className="max-w-3xl overflow-hidden rounded-panel border">
+    <div className="overflow-hidden rounded-panel border">
       <IconDetail
         meta={current}
         related={related}
@@ -23,7 +23,8 @@ export function IconPageView({ meta, related, categories, heading }: { meta: Ico
         onBadge={(badge) => setPrefs({ badge })}
         onOpen={setCurrent}
         title="h1"
-        heading={current.name === meta.name ? heading : undefined}
+        // The page is about the whole family, so its title stays put while a badged version is shown.
+        heading={heading}
         description="p"
         // Shown in the page's HTML until the live icon has loaded.
         placeholder={current.name === meta.name ? (

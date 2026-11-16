@@ -13,6 +13,7 @@ import { SizeControl } from "@/components/kit/size-control";
 import { Swatches } from "@/components/kit/swatches";
 import { Glide } from "@/components/kit/glide";
 import { chip, navItem, tile as tileStyle } from "@/components/kit/styles";
+import { SetsEntry } from "@/learn/sets-entry";
 import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta } from "@/lib/icons";
 import { track } from "@/lib/analytics";
 import { markIconSeen, markNewSetSeen, useNewSetSeen } from "@/lib/seen-new";
@@ -176,6 +177,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
               {!newSeen && <span aria-hidden className="size-1.5 shrink-0 rounded-pill bg-brand" />}
             </button>
           )}
+          <SetsEntry as="nav" />
           {cats.map((c) => (
             <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} onClick={(e) => filterTo(e, c.id)} className={navItem({ active: cat === c.id })}>
               <span className="truncate">{tr(c.en, c.zh ?? c.en)}</span>
@@ -242,9 +244,11 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
             <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
             <button type="button" aria-current={!cat} className={chip({ active: !cat })} onClick={() => pickCat("")}>{tr("All", "全部")}</button>
             {hasNew && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
+            <SetsEntry as="chip" />
             {cats.map((c) => (
               <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} className={chip({ active: cat === c.id })} onClick={(e) => filterTo(e, c.id)}>{tr(c.en, c.zh ?? c.en)}</a>
             ))}
+
           </div>
           </div>
         </div>

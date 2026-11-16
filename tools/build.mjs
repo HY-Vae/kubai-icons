@@ -293,10 +293,17 @@ New icons come out in new releases. Icons marked "since" a version need at least
 - [Design](${SITE}/docs/design/): how an icon is drawn
 - [Agent skill](${SITE}/skill/): draw new icons in the same style with a coding agent
 
+## Guides and comparisons
+
+- [Next.js](${SITE}/docs/guides/nextjs/), [Nuxt](${SITE}/docs/guides/nuxt/), [Tailwind CSS](${SITE}/docs/guides/tailwind/), [shadcn/ui](${SITE}/docs/guides/shadcn-ui/), [no build step](${SITE}/docs/guides/no-build/): framework guides
+- [Play from a button](${SITE}/docs/guides/button-hover/), [colors and dark mode](${SITE}/docs/guides/colors-dark-mode/), [design tools](${SITE}/docs/guides/figma/): usage guides
+- [Lucide](${SITE}/docs/compare/lucide/), [Heroicons](${SITE}/docs/compare/heroicons/), [Phosphor](${SITE}/docs/compare/phosphor/): comparisons, with name tables for switching
+- [Icon sets](${SITE}/icons/sets/): icons picked for one kind of product, such as dashboards, online stores, chat apps, media players and smart home apps
+
 ## Icons
 
 - [Every icon name, by category](${SITE}/llms-full.txt): plain text, with usage
-- [Browse and search](${SITE}/icons/): one page per icon at ${SITE}/icons/<name>/
+- [Browse and search](${SITE}/icons/): one page per icon at ${SITE}/icons/<name>/, with its hover motion and usage
 `;
   write(path.join(pub, 'llms.txt'), `${intro}\n${docs}`);
   const list = categories.filter((c) => bases.some((ic) => ic.category === c.id)).map((c) => {
