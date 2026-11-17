@@ -76,6 +76,7 @@ Describe what you need in plain words. The skill triggers on requests about icon
 - "Add a scissors icon and a map icon to this set."
 - "We need an icon for Export that matches the others."
 - "Give me static SVG files I can drop into Figma."
+- "Draw two-tone solid icons for our app's tab bar."
 
 The agent then:
 
@@ -84,6 +85,21 @@ The agent then:
 3. Runs the self-check beside existing icons, compares sizes, outlines, layers and colors, and repeats until every item on the checklist passes.
 
 To start a set for your own product, the skill copies the engine, gallery and self-check into your project and works there.
+
+### Two styles
+
+The skill draws in either of two styles and asks when your request doesn't make it clear.
+
+| Style | Looks | Delivers | Rules |
+| --- | --- | --- | --- |
+| Layered (default) | Folder-like back and front pieces, outside outlines, shadows, hover motion | Animated SVG + JS, or static SVG | [`PROMPT.md`](PROMPT.md) |
+| Two-tone solid | Solid shapes on a 16 grid: a light body with accents in the brand colour | Static SVG | [`styles/duotone/GUIDE.md`](styles/duotone/GUIDE.md) |
+
+<p align="center">
+  <img src="assets/duotone.png" alt="Twenty-six two-tone solid icons: folder, document, calendar, camera, lock, user, ID card, building, open book, bell, trash, gift, smile, chat, clock, image, ticket, wallet, headphones, microphone, cloud, shopping bag, battery, archive, mail and printer" width="720" />
+</p>
+
+Ask for "solid", "filled", "two-tone" or "duotone" icons, or small icons for an app's interface, and the skill uses the two-tone style.
 
 <p align="center">
   <img src="assets/skill.webp" alt="Six icons on hover: an alarm clock rings, a notebook opens, a scan line sweeps a QR code, a door opens to an exit arrow, a calculator key presses, a compass needle settles north" />
@@ -181,6 +197,23 @@ node scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/
 | `--size 96` | Width and height in pixels. |
 | `--pad 2.5` | Room around the canvas, in icon units, so the shadow isn't cut off. |
 | `--out dir` | Where the files go; `export/` by default. |
+
+</details>
+
+<details>
+<summary><strong>Two-tone solid style</strong></summary>
+
+<br />
+
+Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 26 examples, a self-check and an export script. Names are in English.
+
+```bash
+node styles/duotone/check.mjs --only mail --with folder,lock     # sheets and findings.md in styles/duotone/check-out/
+node styles/duotone/export.mjs --only folder,lock --size 24 --out icons/
+node styles/duotone/export.mjs --primary #0EA5E9 --out icons/   # another brand colour; the light tone follows it
+```
+
+The self-check measures what the rules can measure: whether each icon fills its keyline, how much of it is the primary colour, whether it uses both tones, and whether neighbouring parts touch or keep a gap of exactly 1.
 
 </details>
 
