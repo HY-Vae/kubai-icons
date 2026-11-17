@@ -1,18 +1,27 @@
 ---
 name: kubai-icons
-description: 生成一套风格统一的功能图标，可以交付悬停时会形变的动态版（SVG + JS），也可以导出静态 SVG 文件，沿用 Lumno 书签文件夹图标的构造：后片、内容、前片分层，外描边，所有颜色从一个主色推导，两组关键帧的悬停动效，可切换色板。用户要做图标、功能图标、动态图标、静态 SVG 图标、icon set、带 hover 动效的图标，或要往这套图标里加新图标时使用。
+description: 生成一套风格统一的功能图标，有两种风格可选。分层动态（默认）：沿用 Lumno 书签文件夹图标的构造，后片、内容、前片分层，外描边，所有颜色从一个主色推导，悬停时形变，也可以导出静态 SVG。双色面性：16 网格的实心双色静态 SVG，浅色主体加主色点缀，适合界面里的小尺寸图标。用户要做图标、功能图标、动态图标、静态 SVG 图标、面性或双色图标、duotone 图标、icon set、带 hover 动效的图标，或要往这套图标里加新图标时使用。
 license: Kubai Icons License (source-available). Complete terms in LICENSE.
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   display_name: "Kubai 动态图标"
   display_name_en: "Kubai Icons"
-  description_zh: "按同一种风格稳定地画出功能图标：文件夹式的前后分层、外描边、一个主色推导全部颜色，悬停时做物体本身会做的动作；也可以导出静态 SVG。"
-  description_en: "Draws functional icons in one consistent style: folder-like layers, outside outlines, every colour derived from one accent, and hover motion the object itself would make. Can also export static SVG."
+  description_zh: "按同一种风格稳定地画出功能图标。两种风格可选：文件夹式的前后分层、外描边、悬停时做物体本身会做的动作的动态图标；或者 16 网格、浅色主体加主色点缀的双色面性图标。"
+  description_en: "Draws functional icons in one consistent style, in either of two looks: layered animated icons with outside outlines and hover motion the object itself would make, or two-tone solid icons on a 16 grid with light bodies and accents in the brand colour."
 ---
 
 # Kubai Icons
 
-这个 skill 自带完整的实现：引擎、一整套范例图标、展示页、自检脚本和静态导出脚本。你的工作是按规则写新图标，不是重写引擎。
+这个 skill 自带两种风格的完整实现：每种都有规则、范例图标、自检脚本和导出脚本。你的工作是按规则写新图标，不是重写引擎。
+
+## 两种风格
+
+| 风格 | 样子 | 交付 | 规则 | 适合 |
+| --- | --- | --- | --- | --- |
+| 分层动态（默认） | 文件夹式的后片、内容、前片分层，外描边，投影和内发光，悬停时形变 | 动态 SVG + JS，或静态 SVG | `PROMPT.md` | 网页、营销页、需要动效和质感的地方，常用 24–96px |
+| 双色面性 | 16 网格的实心图标，浅色主体加主色点缀，两色直接相接 | 静态 SVG | `styles/duotone/GUIDE.md` | 界面里的导航、按钮、列表、标签页，常用 16–48px |
+
+用户说"面性""实心""填充""双色""duotone""bulk""两种颜色"，或要的是界面里 16–24px 的小图标，就是双色面性。用户说"动态""悬停""hover""动效""分层"，或没有提到风格但要放在网页里，就是分层动态。两种都说不清时，先问一句，并用上表说明区别。
 
 ## 包里有什么
 
@@ -24,9 +33,18 @@ metadata:
 - `scripts/measure.js`：测量规则的代码，由自检脚本加载。量的是动作有没有跳帧、结束时是否平稳停下，尺寸和居中，分层，线宽，过小的细节，细缝，被盖住的描边露头，尖角接缝处的毛刺，以及落在背景上却没有描边的边。
 - `scripts/export.mjs`：静态导出。把图标渲染成不依赖脚本和样式表的独立 SVG 文件，可以指定色板、主色和静止或悬停状态。
 
+以上是分层动态风格。双色面性风格全部在 `styles/duotone/` 里：
+
+- `GUIDE.md`：全部规则，每一条都是硬性要求。动手前完整读一遍。
+- `kit.mjs`：几何和渲染：平滑圆角、圆角矩形、胶囊、带凸起的主体、关键形状、颜色推导。直接复用，不要改。
+- `icons.mjs`：26 个范例。新图标按同样的格式追加。
+- `check.mjs`：自检。截出 64/48/24/16px、参考线对位图和 1 倍屏 16px，并测量关键形状、主色占比、两种颜色、元素间距，结果写进 `findings.md`。
+- `export.mjs`：导出独立 SVG，可以换品牌色，辅色自动推导。
+- `chrome.mjs`：两个脚本共用的无头 Chrome 工具。
+
 ## 流程
 
-1. 读 `PROMPT.md`。
+1. 确定风格（见"两种风格"）。选了双色面性，就只读 `styles/duotone/GUIDE.md`，按它第 8–10 节的写法、自检和导出来做，下面第 2–9 步不适用；做新一套时，把 `styles/duotone/` 里的 `kit.mjs`、`icons.mjs`、`check.mjs`、`export.mjs`、`chrome.mjs` 复制到目标位置，在那份副本里工作，保留每个文件开头的版权声明；`GUIDE.md` 和 `PROMPT.md`、`SKILL.md` 一样只留在 skill 里，不要复制进去。选了分层动态，读 `PROMPT.md`，继续下面的步骤。
 2. 确定交付形式。用户没说清楚时先问一句：
    - 动态（默认）：SVG + JS，悬停时形变，靠 `src/engine.js` 在页面里运行。适合网页和能跑 JS 的界面。
    - 静态：独立的 `.svg` 文件，没有动效，任何地方都能用：设计工具、原生 App、文档、`<img>`。用户提到"切图""SVG 文件""放进 Figma""App 里用"等，就是要静态。
