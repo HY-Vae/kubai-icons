@@ -76,6 +76,7 @@ Describe what you need in plain words. The skill triggers on requests about icon
 - "Add a scissors icon and a map icon to this set."
 - "We need an icon for Export that matches the others."
 - "Give me static SVG files I can drop into Figma."
+- "Draw two-tone solid icons for our app's tab bar."
 
 The agent then:
 
@@ -84,6 +85,21 @@ The agent then:
 3. Runs the self-check beside existing icons, compares sizes, outlines, layers and colors, and repeats until every item on the checklist passes.
 
 To start a set for your own product, the skill copies the engine, gallery and self-check into your project and works there.
+
+### Two styles
+
+The skill draws in either of two styles and asks when your request doesn't make it clear.
+
+| Style | Looks | Delivers | Rules |
+| --- | --- | --- | --- |
+| Layered (default) | Folder-like back and front pieces, outside outlines, shadows, hover motion | Animated SVG + JS, or static SVG | [`PROMPT.md`](PROMPT.md) |
+| Two-tone solid | Solid shapes on a 16 grid: a light body with accents in the brand colour; lively hover motion that acts out what the icon means | Static SVG, or SVG + JS for the motion | [`styles/duotone/`](styles/duotone), also released on its own as the `kubai-duotone` skill |
+
+<p align="center">
+  <img src="assets/duotone.png" alt="Eighty-one two-tone solid icons, from a folder, a calendar and a camera to home, search, settings, status marks in circles, a database, wifi and a store, and variants with a plus, a check, a sparkle or an off slash" width="720" />
+</p>
+
+Ask for "solid", "filled", "two-tone" or "duotone" icons, or small icons for an app's interface, and the skill uses the two-tone style.
 
 <p align="center">
   <img src="assets/skill.webp" alt="Six icons on hover: an alarm clock rings, a notebook opens, a scan line sweeps a QR code, a door opens to an exit arrow, a calculator key presses, a compass needle settles north" />
@@ -181,6 +197,31 @@ node scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/
 | `--size 96` | Width and height in pixels. |
 | `--pad 2.5` | Room around the canvas, in icon units, so the shadow isn't cut off. |
 | `--out dir` | Where the files go; `export/` by default. |
+
+</details>
+
+<details>
+<summary><strong>Two-tone solid style</strong></summary>
+
+<br />
+
+Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 81 examples with their hover motion (eight of them variants with a badge: plus, check, sparkle or an off slash), a self-check and an export script. Names are in English. [`CHANGELOG.md`](styles/duotone/CHANGELOG.md) records each change and the problem behind it.
+
+It is also a skill of its own, `kubai-duotone`. To install only this style, download `kubai-duotone-v*.zip` from the [latest release](https://github.com/kubai087/kubai-icons/releases/latest) and unzip it into your skills folder:
+
+```bash
+unzip kubai-duotone-v*.zip -d ~/.claude/skills/
+```
+
+With the whole repository installed as `kubai-icons`, you don't need it: that skill sends two-tone requests to the same files.
+
+```bash
+node styles/duotone/check.mjs --only mail --with folder,lock     # sheets and findings.md in styles/duotone/check-out/
+node styles/duotone/export.mjs --only folder,lock --size 24 --out icons/
+node styles/duotone/export.mjs --primary #0EA5E9 --out icons/   # another brand colour; the light tone follows it
+```
+
+The self-check measures what the rules can measure: whether each icon fills its keyline, how much of it is the primary colour, whether it uses both tones, and whether neighbouring parts touch or keep a gap of exactly 1.
 
 </details>
 

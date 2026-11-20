@@ -76,11 +76,17 @@ jobs:
         run: node scripts/check.mjs
       - name: Export every gallery icon as static SVG
         run: node scripts/export.mjs
+      - name: Self-check the two-tone solid examples
+        run: node styles/duotone/check.mjs
+      - name: Export the two-tone solid examples as SVG
+        run: node styles/duotone/export.mjs
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: skill-check-out
-          path: check-out/
+          path: |
+            check-out/
+            styles/duotone/check-out/
 
   # The status check required by the branch rule. A job skipped after a failed dependency
   # counts as passing, so this one always runs and reads the results itself.
