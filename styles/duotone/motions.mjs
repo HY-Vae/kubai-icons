@@ -43,7 +43,7 @@ export const MOTION = {
   trash: { say: '盖子绕左端掀开', moves: { 0: { y: [-0.25, -0.25], r: [-6, -6], o: [2, 4] } } },
   gift: { say: '盒盖连同蝴蝶结掀起', moves: same([0, 1, 2, 4], { y: [-1, -1], r: [-4, -4], o: [8, 7.75] }) },
   smile: { say: '笑得眯起眼', moves: { 1: { sy: 0.35, o: [8, 6.25] }, 2: { sx: 1.3, sy: 1.25, o: [8, 9.25] } } },
-  chat: {
+  'message-square': {
     say: '新消息弹出来，字一行行打出来',
     moves: { all: { s: [0.85, 1.08, 1], o: [1, 14] }, 1: { sx: [0, 1, 1], o: [4, 6.625] }, 2: { sx: [0, 0, 1], o: [4, 9.625] } }
   },
@@ -63,7 +63,7 @@ export const MOTION = {
   },
   cloud: { say: '风吹云散，太阳露出来', moves: { 0: { x: [0.75, 0.75], y: [-1, -1] }, 1: { x: [-0.75, -0.75] } } },
   'shopping-bag': { say: '提起来，绕提手晃一晃', moves: { all: { y: [-0.75, -0.75, -0.75, -0.75], r: [8, -6, 3, 0], o: [8, 2] } } },
-  battery: { say: '接上电，一格一格充满', moves: { 1: { a: [0.15, 1, 1, 1] }, 2: { a: [0.15, 0.15, 1, 1] }, 3: { a: [0.15, 0.15, 0.15, 1] } } },
+  'battery-full': { say: '接上电，一格一格充满', moves: { 1: { a: [0.15, 1, 1, 1] }, 2: { a: [0.15, 0.15, 1, 1] }, 3: { a: [0.15, 0.15, 0.15, 1] } } },
   archive: { say: '盖子掀起', moves: { 0: { y: [-0.75, -0.75], r: [-4, -4], o: [8, 4] } } },
   mail: {
     // The closed envelope drops 1.5 to make room and a light sheet with a blue line (as in inbox
@@ -84,7 +84,7 @@ export const MOTION = {
     say: '箭杆从盒子里画出来，画到头箭头弹出',
     moves: { 1: { w: [0, 1, 1] }, 2: { a: [0, 0, 1], s: [0.4, 0.4, 1], o: [11, 4.15] } }
   },
-  edit: { say: '笔尖来回书写', moves: { all: { r: [-7, 5, -3, 1, 0], o: [2, 14] } } },
+  'pencil': { say: '笔尖来回书写', moves: { all: { r: [-7, 5, -3, 1, 0], o: [2, 14] } } },
   heart: { say: '心跳', moves: { all: { s: [1.1, 0.94, 1.06, 1.06], o: [8, 8.5] } } },
   play: { say: '按下播放，三角向前一推', moves: { all: { s: [0.85, 1.05, 1] }, 1: { x: [1.5, 0] } } },
   phone: {
@@ -94,14 +94,14 @@ export const MOTION = {
     moves: { all: { r: [-12, 12, -10, 10, -6, 6, 0] }, a0: { ...hidden, a: [1, 1, 1, 1, 1, 1, 0] } }
   },
   laptop: { say: '屏幕合上一点再打开', moves: { 0: { sy: [0.25, 1.06, 1], o: [8, 10.5] } } },
-  location: {
+  'map-pin': {
     say: '准星收紧锁定，波纹向外扩散',
     add: [{ layer: L(circ(8, 8, 2.75), { sw: D }), at: 2 }],
     moves: { 1: { s: 0.75 }, 2: { s: [1.5, 1.2] }, a0: { ...hidden, s: [1, 2.2], a: [1, 0] } }
   },
   music: { say: '音符随节拍跳起', moves: { all: { y: [-0.75, -0.6], r: [-6, -5] } } },
   link: { say: '链环拉开，连杆再接上', moves: { 0: { sx: [1.08, 1] }, 1: { sx: [0, 1] } } },
-  cart: { say: '向前推，车筐颠一下', moves: { all: { x: [0.75, -0.4, 0] }, 0: { y: [-0.75, 0] } } },
+  'shopping-cart': { say: '向前推，车筐颠一下', moves: { all: { x: [0.75, -0.4, 0] }, 0: { y: [-0.75, 0] } } },
   'circle-check': { say: '对勾重新写一遍', moves: { 1: { w: [0, 1] } } },
   'circle-plus': { say: '先写竖，再写横', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
   'circle-x': { say: '两笔划出叉号', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
@@ -157,7 +157,50 @@ export const MOTION = {
   receipt: { say: '账单送出来，最后一行打上', moves: { all: { y: [-0.75, 0] }, 2: { sx: [0, 1], o: [5, 10.125] } } },
   package: { say: '箱盖连同胶带弹起', moves: same([0, 2], { y: [-1, -1], r: [-3, -3], o: [8, 3.75] }) },
   store: { say: '遮阳篷被风吹得一鼓一收', moves: { 0: { sy: [1.35, 0.95, 1.05, 1], o: [8, 2] } } },
-  'lock-open': { say: '像挂在钥匙圈上一样转一圈', moves: { all: { sx: [-1, 1] } } }
+  'lock-open': { say: '像挂在钥匙圈上一样转一圈', moves: { all: { sx: [-1, 1] } } },
+  menu: {
+    say: '菜单展开：三条线从左往右依次伸出',
+    moves: { 0: { w: [0, 1, 1, 1] }, 1: { w: [0, 0, 1, 1] }, 2: { w: [0, 0, 0, 1] } }
+  },
+  grid: {
+    // Blue copies of the tiles, one diagonal at a time, light up and go out again from the top
+    // left to the bottom right.
+    say: '高亮从左上角斜着扫过整个网格',
+    add: [0, 1, 2, 3, 4].map((k) => ({
+      layer: L([0, 1, 2].flatMap((i) => [0, 1, 2].filter((j) => i + j === k).map((j) => rr(2 + (i * 13) / 3, 2 + (j * 13) / 3, 10 / 3, 10 / 3, 1))).join(''))
+    })),
+    moves: Object.fromEntries([0, 1, 2, 3, 4].map((k) => [`a${k}`, { ...hidden, a: [0, 1, 2, 3, 4, 5].map((f) => (f === k ? 1 : 0)) }]))
+  },
+  list: {
+    say: '列表项一行行排出来',
+    moves: { 1: { sx: [0, 1, 1, 1], o: [4.5, 3.25] }, 2: { sx: [0, 0, 1, 1], o: [4.5, 8] }, 3: { sx: [0, 0, 0, 1], o: [4.5, 12.75] } }
+  },
+  sun: { say: '光芒先收拢，再向外放出，转过一格', moves: same([1, 2], { s: [0.75, 1], r: [0, 45] }) },
+  'rotate-cw': {
+    say: '圆弧顺时针画一圈，画到头箭头弹出',
+    moves: { 0: { w: [0, 1, 1] }, 1: { a: [0, 0, 1], s: [0.4, 0.4, 1], o: [12.243, 3.757] } }
+  },
+  'chart-bar': {
+    say: '柱子从底部依次长起来',
+    moves: { 0: { sy: [0, 1, 1, 1], o: [8, 14] }, 1: { sy: [0, 0, 1, 1], o: [8, 14] }, 2: { sy: [0, 0, 0, 1], o: [8, 14] } }
+  },
+  'chart-pie': { say: '蓝色的一块从饼图中拉出来', moves: { 1: { x: 0.75, y: -0.75 } } },
+  filter: {
+    say: '三条线由长到短依次展开',
+    moves: { 1: { sx: [0, 1, 1, 1] }, 2: { sx: [0, 0, 1, 1] }, 3: { sx: [0, 0, 0, 1] } }
+  },
+  briefcase: { say: '提起来，绕提手晃一晃', moves: { all: { y: [-0.75, -0.75, -0.75, -0.75], r: [4, -3, 1.5, 0], o: [8, 2] } } },
+  keyboard: {
+    say: '按键一排排按下去',
+    moves: { 1: { y: [0.5, 0, 0, 0] }, 2: { y: [0, 0.5, 0, 0] }, 3: { y: [0, 0, 0.5, 0] } }
+  },
+  toggle: {
+    // The knob slides to the right end; the track fills with blue and the knob turns light, as a
+    // switch turned on.
+    say: '开关拨到右边，轨道亮起，打开',
+    add: [{ layer: L(pill(1, 4, 14, 8)), at: 1 }, { layer: L(circ(5, 8, 3), Bt) }],
+    moves: { 1: { x: 6 }, a0: { ...hidden, a: 1 }, a1: { ...hidden, a: 1, x: 6 } }
+  }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own

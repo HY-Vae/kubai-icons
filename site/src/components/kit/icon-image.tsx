@@ -33,7 +33,10 @@ function hoverPose(svg: string, icon: KubaiIconData) {
  * image at the intrinsic size and scales the result.
  */
 export function iconUrl(icon: KubaiIconData, { color, variant = "color", badgeColor }: IconLook, pose: Pose, px: number) {
-  let svg = toSvg(icon, { color, variant, badgeColor, id: "k", attrs: { viewBox: `${-PAD} ${-3 - PAD} ${SIDE} ${SIDE}`, width: px, height: px } });
+  // A two-tone icon's 16 grid takes the place of the 31-unit canvas, padded in proportion.
+  const k = icon.style === "duotone" ? 16 / 31 : 1;
+  const viewBox = icon.style === "duotone" ? `${-PAD * k} ${-PAD * k} ${SIDE * k} ${SIDE * k}` : `${-PAD} ${-3 - PAD} ${SIDE} ${SIDE}`;
+  let svg = toSvg(icon, { color, variant, badgeColor, id: "k", attrs: { viewBox, width: px, height: px } });
   if (pose === "hover") svg = hoverPose(svg, icon);
   return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 }
@@ -65,7 +68,8 @@ const recall = (key: string) => {
   return bmp;
 };
 const keyOf = (icon: KubaiIconData, { color, variant = "color", badgeColor }: IconLook, pose: Pose, px: number) =>
-  `${icon.name}|${color}|${variant}|${badgeColor}|${pose}|${px}`;
+  // A two-tone icon shares its name with the layered one, so the style is part of the key.
+  `${icon.style === "duotone" ? "duotone:" : ""}${icon.name}|${color}|${variant}|${badgeColor}|${pose}|${px}`;
 /** True when two bitmap keys show the same icon, pose and size in different colours. */
 const recoloured = (a: string | null, b: string) => {
   if (!a || a === b) return false;
